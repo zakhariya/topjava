@@ -30,27 +30,24 @@ public class UserMealsUtil {
 
         for (UserMeal meal : meals) {
             LocalDate ld = meal.getDateTime().toLocalDate();
+
+            caloriesAmount.merge(ld, meal.getCalories(), (oldVal, newVal) -> oldVal + newVal);
+        }
+
+        for (UserMeal meal : meals) {
+            LocalDate ld = meal.getDateTime().toLocalDate();
             LocalTime lt = meal.getDateTime().toLocalTime();
 
             int sumCalories = caloriesAmount.getOrDefault(ld, 0);
-            sumCalories += meal.getCalories();
-
-            System.out.println(ld + " " + sumCalories);
-
-            caloriesAmount.put(ld, sumCalories);
 
             if (TimeUtil.isBetweenHalfOpen(lt, startTime, endTime)) {
+                boolean excess = sumCalories > caloriesPerDay;
+
                 UserMealWithExcess mealWithExcess =
-                        new UserMealWithExcess(meal.getDateTime(), meal.getDescription(), meal.getCalories(), false);
+                        new UserMealWithExcess(meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
 
                 mealsWithExcess.add(mealWithExcess);
             }
-        }
-
-        for (UserMealWithExcess mealWithExcess : mealsWithExcess) {
-//            LocalDate ld = mealWithExcess.
-
-            int sumCalories = caloriesAmount.getOrDefault(ld, 0);
         }
 
         return mealsWithExcess;
