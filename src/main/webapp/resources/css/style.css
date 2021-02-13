@@ -1,3 +1,33 @@
 #meals-list-container .excess {
     color: red;
 }
+
+#meals-list-container table {
+
+}
+
+#meals-list-container table td {
+
+}
+
+#meal-form-container {
+
+}
+
+#meal-form-container form {
+    background: aliceblue;
+    padding: 1em;
+    display: inline-block;
+    border-radius: 15%;
+}
+
+#meal-form-container form label {
+    text-align: center;
+    display: block;
+}
+
+#meal-form-container form input {
+    float: none;
+    display: block;
+    margin: 1em;
+}
