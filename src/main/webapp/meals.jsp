@@ -22,7 +22,7 @@
             <thead><tr><td>DateTime</td><td>Description</td><td>Calories</td><td></td><td></td></tr></thead>
             <tbody>
             <c:forEach var="meal" items="${meals}">
-                <tr <c:if test="${meal.excess == true}">class="excess"</c:if>>
+                <tr class="${meal.excess ? 'excess' : 'normal'}">
                     <td>${meal.date} ${meal.time}</td>
                     <td>${meal.description}</td>
                     <td>${meal.calories}</td>

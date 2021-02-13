@@ -1,3 +1,7 @@
+#meals-list-container .normal {
+    color: green;
+}
+
 #meals-list-container .excess {
     color: red;
 }
