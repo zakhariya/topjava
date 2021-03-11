@@ -24,7 +24,7 @@ public class SpringMain {
 
             MealRestController mealRestController = appCtx.getBean(MealRestController.class);
 //            mealRestController.getAll().forEach(System.out::println);
-            System.out.println(mealRestController.get(5));
+//            System.out.println(mealRestController.get(5));
 
         }
     }

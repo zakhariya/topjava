@@ -4,7 +4,6 @@ import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
-import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -19,17 +18,17 @@ public class InMemoryMealRepository implements MealRepository {
     private final AtomicInteger counter = new AtomicInteger(0);
 
     {
-        MealsUtil.meals.forEach(this::save);
+        MealsUtil.meals.forEach(meal -> save(meal, meal.getUserId()));
     }
 
     @Override
-    public Meal save(Meal meal) {
+    public Meal save(Meal meal, int userId) {
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
             repository.put(meal.getId(), meal);
 
             return meal;
-        } else if (meal.getUserId() != SecurityUtil.authUserId()) {
+        } else if (meal.getUserId() != userId) {
             return null;
         }
 
@@ -38,10 +37,10 @@ public class InMemoryMealRepository implements MealRepository {
     }
 
     @Override
-    public boolean delete(int id) {
-        Meal meal = get(id);
+    public boolean delete(int id, int userId) {
+        Meal meal = get(id, userId);
 
-        if (meal == null || meal.getUserId() != SecurityUtil.authUserId()) {
+        if (meal == null || meal.getUserId() != userId) {
             return false;
         }
 
@@ -49,17 +48,17 @@ public class InMemoryMealRepository implements MealRepository {
     }
 
     @Override
-    public Meal get(int id) {
+    public Meal get(int id, int userId) {
         Meal meal = repository.get(id);
 
-        return meal.getUserId() == SecurityUtil.authUserId() ? meal : null;
+        return meal.getUserId() == userId ? meal : null;
     }
 
     @Override
-    public Collection<Meal> getAll() {
+    public Collection<Meal> getAll(int userId) {
         return repository.values()
                 .stream()
-                .filter(meal -> meal.getUserId() == SecurityUtil.authUserId())
+                .filter(meal -> meal.getUserId() == userId)
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .collect(Collectors.toList());
     }
